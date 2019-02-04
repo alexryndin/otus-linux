@@ -1,0 +1,10 @@
+[vagrant@otuslinux ~]$ lsblk -f
+NAME      FSTYPE            LABEL UUID                                 MOUNTPOINT
+sda                                                                    
+└─sda1    xfs                     9165566a-91aa-41d0-89cd-7d51756fbc16 
+sdb                                                                    
+└─sdb1    linux_raid_member       e505c3c0-cffc-ec23-8ed4-a3a19f626544 
+  └─md127 ext4                    12a95939-73c7-4808-a011-78fbd35392aa /
+sdc                                                                    
+└─sdc1    linux_raid_member       e505c3c0-cffc-ec23-8ed4-a3a19f626544 
+  └─md127 ext4                    12a95939-73c7-4808-a011-78fbd35392aa /
