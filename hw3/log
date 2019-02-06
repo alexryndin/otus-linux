@@ -1,0 +1,28 @@
+yum install xfsdump
+pvcreate /dev/sdb
+vgcreate vg_root /dev/sdb
+lvcreate -n lv_root -l +100%FREE /dev/vg_root
+mkfs.xfs /dev/vg_root/lv_roo
+mkfs.xfs /dev/vg_root/lv_root
+mkdir /mnt/root
+mount /dev/vg_root/lv_root /mnt/root/
+xfsdump - /dev/VolGroup00/LogVol00 | xfsrestore  - /mnt/root
+for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/root/$i; done
+history > /mnt/root/root/history
+grub2-mkconfig -o /boot/grub2/grub.cfg
+su - vagrant
+dracut --force
+vi /boot/grub2/grub.cfg 
+vgs
+lvs
+history
+history >> history 
+lvremove /dev/VolGroup00/LogVol00
+lvcreate -n VolGroup00/LogVol00 -L 8G VolGroup00
+xfsdump  - /dev/vg_root/lv_root | xfsrestore  - /mnt/root
+mkfs.xfs /dev/VolGroup00/LogVol00
+mount /dev/VolGroup00/LogVol00 /mnt/root/
+for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/root/$i; done
+chroot /mnt/root
+grub2-mkconfig -o /boot/grub2/grub.cfg
+dracut --force
