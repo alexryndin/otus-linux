@@ -1,0 +1,194 @@
+    1   grub2-mkconfig -o /boot/grub2/grub.cfg
+    2  su - vagrant
+    3  dracut --force
+    4  vi /boot/grub2/grub.cfg 
+    5  vgs
+    6  lvs
+    7  history
+    8  history >> history 
+    9   grub2-mkconfig -o /boot/grub2/grub.cfg
+   10  vi /boot/grub2/grub.cfg 
+   11  history
+   12  dracut --force
+   13  vi /root/history 
+   14  ls
+   15  pvcreate /dev/sd[dc]
+   16  vgcreate vg_var /dev/sd[dc]
+   17  lvcreate -L 950M -m1 -n lv_var vg_var
+   18  mkfs.ext4 /dev/vg_var/lv_var
+   19  mkdir /mnt/var
+   20  mount /dev/vg_var/lv_var /mnt/var
+   21  cp -aR /var/* /mnt/var/
+   22  mkdir /tmp/oldvar && mv /var/* /tmp/oldvar
+   23  umount /mnt/var
+   24  mount /dev/vg_var/lv_var /var
+   25  blkid | grep var:
+   26  vi /etc/fstab 
+   27  blkid
+   28  reboot
+   29  lvremove /dev/vg_root/lv_rooot
+   30  lvremove /dev/vg_root/lv_root
+   31  vgremove vg_root
+   32  pvremove /dev/sdb
+   33  lvcreate -n LogVol_Home -L 2G /dev/VolGroup00
+   34  mkfs.xfs /dev/VolGroup00/LogVol_Home
+   35  mkdir /mnt/home
+   36  mount /dev/VolGroup00/LogVol_Home /mnt/home
+   37  cp -aR /home/* /mnt/home/
+   38  rm -rf /home/*
+   39  umount /mnt/home
+   40  mount /dev/VolGroup00/LogVol_Home /home
+   41  blkid |
+   42  blkid 
+   43  vi /etc/fstab 
+   44  touch /home/file{1..20}
+   45  vi /home/file1
+   46  lvcreate -L 100MB -s -n home_snap /dev/VolGroup00/LogVol_Home
+   47  phs
+   48  pgs
+   49  phs
+   50  pvs
+   51  vgs
+   52  rm -f /home/file{11..20}
+   53  vi /home/file1
+   54  umount /home
+   55  lvconvert --merge /dev/VolGroup00/home_snap
+   56  mount /home
+   57  mount /dev/VolGroup00/LogVol_Home /home
+   58  vi /home/file1
+   59  ls /home/file15
+   60  cat history 
+   61  vgs
+   62  lvmdiskscan 
+   63  vgscan
+   64  vgs --help
+   65  vgs -a
+   66  pvs
+   67  lvs
+   68  lsblk
+   69  vgcreate vg_slow /dev/sdb
+   70  vgcreate vg_fast /dev/sde
+   71  lvcreate -l+80%FREE -m1 -n opt_mirror vg_slow
+   72  vgs
+   73  lvcreate -l+80%FREE  -n opt_mirror vg_slow
+   74  lvcreate -l+80%FREE -m1 -n opt_mirror vg_slow
+   75  lvremove opt_mirror
+   76  lvremove vg_slow opt_mirror
+   77  lvcreate -l+80%FREE -m1 -n opt_mirror vg_slow
+   78  lvcreate -l+60%FREE -m1 -n opt_mirror vg_slow
+   79  lvcreate -l+40%FREE -m1 -n opt_mirror vg_slow
+   80  lvcreate -l+20%FREE -m1 -n opt_mirror vg_slow
+   81  lvcreate -L 500M -m1 -n opt_mirror vg_slow
+   82  lvcreate -L 400M -m1 -n opt_mirror vg_slow
+   83  vgs
+   84  lvcreate -l 400M -m1 -n opt_mirror vg_slow
+   85  lvcreate -l+2%FREE -m1 -n opt_mirror vg_slow
+   86  lvcreate -l 4M -m1 -n opt_mirror vg_slow
+   87  lvcreate -L 4M -m1 -n opt_mirror vg_slow
+   88  lvcreate -l+80%FREE -m1 -n opt_mirror vg_slow --alloc anywhere
+   89  lsblk
+   90  lvremove vg_slow opt_mirror
+   91  vgextend /dev/sde
+   92  vgextend --help
+   93  vgextend vg_slow /dev/sde
+   94  vgreduce vg_fast
+   95  vgreduce --help
+   96  vgreduce vg_fast /dev/sde
+   97  vgremove vg_fase
+   98  vgremove vg_fast
+   99  vgextend vg_slow /dev/sde
+  100  lvcreate -l+80%FREE -m1 -n opt_mirror vg_slow 
+  101  lsblk
+  102  lvremove vg_slow opt_mirror
+  103  vgreduce vg_slow /dev/sde
+  104  vgcreate vg_fast /dev/sde
+  105  lvcreate -l+80%FREE -m1 -n opt_mirror vg_slow --alloc anywhere
+  106  lvcreate -n l_opt_cache -l80%FREE VG vg_fast
+  107  lvcreate -n l_opt_cache -l80%FREE  vg_fast
+  108         lvcreate -n l_opt_cache_meta -l80%Free  vg_fast
+  109  lvconvert --type cache-pool --poolmetadata VG/CacheMetaLV
+  110  lvconvert --type cache-pool --poolmetadata vg_fast/l_opt_cache_meta l_opt_cache
+  111  vgs
+  112  lvreduce l_opt_cache -l 100
+  113  lvreduce /dev/mapper/vg_fast_opt_cache -l 100
+  114  lvreduce vg_fast/opt_cache -l 100
+  115  lvs
+  116  lvreduce vg_fast/l_opt_cache -l 100
+  117  lvconvert --type cache-pool --poolmetadata vg_fast/l_opt_cache_meta l_opt_cache
+  118         lvconvert --type cache --cachepool vg_fast/l_opt_cache vg_slow/opt
+  119  lvs
+  120         lvconvert --type cache --cachepool vg_fast/l_opt_cache vg_slow/opt_mirror
+  121  №       lvconvert --type cache --cachepool vg_fast/l_opt_cache vg_slow/opt_mirror
+  122  #       lvconvert --type cache --cachepool vg_fast/l_opt_cache vg_slow/opt_mirror
+  123  vgs
+  124  lvs
+  125  lvconvert --type cache --cachepool vg_fast/l_opt_cache vg_slow/opt_mirror
+  126  lvremove vg_slow opt_mirror
+  127  vgremove vg_fast
+  128  vgremove vg_slow
+  129  lsblk
+  130  vgcreate vgmc /dev/sd[be]
+  131         lvcreate -n l_opt_cache_meta -l60%Free  vgmc /dev/sde
+  132  lvremove l_opt_cache_meta
+  133  lvremove vfmc l_opt_cache_meta
+  134  lvremove vgmc l_opt_cache_meta
+  135         lvcreate -n l_opt_cache_meta -L 10M  vgmc /dev/sde
+  136         lvcreate -n l_opt_cache -L 700M  vgmc /dev/sde
+  137  lvcreate -l+80%FREE -m1 -n opt_mirror vgmc
+  138  lvconvert --type cache-pool --poolmetadata vgmc/l_opt_cache_meta vgmc/l_opt_cache
+  139  lvconvert --type cache --cachepool vgmc/l_opt_cache vgmc/opt_mirror
+  140  lsblk
+  141  lvs
+  142  ls /dev/optmiro
+  143  ls /dev/optmiro*
+  144  ls /dev/opt_miror
+  145  mkfs.zfs /dev/vgmc/opt_mirror 
+  146  yum provides zfs
+  147  $ sudo yum install http://download.zfsonlinux.org/epel/zfs-release.el7_4.noarch.rpm
+  148  sudo yum install http://download.zfsonlinux.org/epel/zfs-release.el7_4.noarch.rpm
+  149  modprobe zfs
+  150  modprobe zfs-release
+  151  vi /etc/yum.repos.d/zfs.repo
+  152  yum install zfs
+  153  modprobe zfs-release
+  154  modprobe zfs
+  155  mkfs.zfs /dev/vgmc/opt_mirror 
+  156  sudo zpool create opt /dev/vgmc/opt_mirror 
+  157  mount
+  158  lsblk
+  159  df -h
+  160  zfs mount
+  161  sudo zfs get all
+  162  sudo zfs get all | grep mount
+  163  lsblk
+  164  vgs
+  165  lvextend --help
+  166  lvextend -L +1000M opt_mirror
+  167  lvextend -L +1000M vgmc/opt_mirror
+  168  lvcreate -l+80%FREE -m1 -n opt_mirror vg_slow --alloc anywhere
+  169  lvextend -L +1000M vgmc/opt_mirror
+  170  lsblk
+  171  sudo zfs get all | grep mount
+  172  sudo zfs get all | grep ышяу
+  173  sudo zfs get all | grep free
+  174  sudo zfs get all | grep size
+  175  sudo zfs get all | grep space
+  176  sudo zfs get all 
+  177  lvs
+  178  sudo zfs get all | grep avai
+  179  umount /home
+  180  umount /var
+  181  lsblk
+  182  umount /var
+  183  lsof
+  184  fuser
+  185  ls /var
+  186  ls /home
+  187  ls /home/vagrant/
+  188  ls /home/vagrant/test 
+  189  cat /home/vagrant/test 
+  190  ll /home/vagrant/test 
+  191  ll /home/vagrant/
+  192  rm -rf /home/*
+  193  umount /home
+  194  history
