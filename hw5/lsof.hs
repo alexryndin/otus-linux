@@ -11,10 +11,10 @@ getAbsDirectoryContents :: FilePath -> IO [FilePath]
 getAbsDirectoryContents dir = map (dir </>) <$> getDirectoryContents dir
 
 getProcs :: IO [FilePath]
-getProcs = (filter (\x -> not (any isAlpha x)) <$> (listDirectory "/proc"))
+getProcs = (filter (\x -> not (any isAlpha x)) <$> (listDirectory "/tmp"))
 
 getProcsFullPaths :: IO [FilePath]
-getProcsFullPaths = (fmap . fmap) ("/proc/" ++) getProcs
+getProcsFullPaths = (fmap . fmap) ("/tmp/" ++) getProcs
 
 getProcsFDPaths :: IO [FilePath]
 getProcsFDPaths = (fmap . fmap) (++ "/fd") getProcsFullPaths
@@ -24,13 +24,25 @@ getFDContents = join (sequence <$> (fmap . fmap) getAbsDirectoryContents getProc
 
 getFDSLs = join $ traverse (filterM (fmap (not . isDirectory) . getFileStatus)) <$> getFDContents
 
+-- main :: IO ()
+-- main = do
+--   result <- getFDSLs
+--   do
+--     files <- result
+--     file <- files
+--     do
+--       result <- try $ putStrLn file
+--       case result of
+--         Left _ -> putStrLn "1123"
+--         Right a -> putStrLn a
+
 main :: IO ()
 main = do
   result <- try getFDSLs :: IO (Either SomeException [[FilePath]])
   case result of
     Left ex -> putStrLn "Fuck"
     Right val -> do
-      sequence_ [putStrLn file | files <- val, file <- files]
+      traverse_ (putStrLn) [readSymbolicLink file | files <- val, file <- files]
 --getSLPaths :: IO [[FilePath]]
 --getSLPaths = do
 --  x <- getProcsFDPaths
