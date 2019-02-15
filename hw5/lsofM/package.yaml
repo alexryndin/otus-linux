@@ -35,6 +35,10 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - lsofM
+    - directory
+    - filepath
+    - unix
+    - split
 
 tests:
   lsofM-test:
