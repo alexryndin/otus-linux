@@ -11,10 +11,10 @@ getAbsDirectoryContents :: FilePath -> IO [FilePath]
 getAbsDirectoryContents dir = map (dir </>) <$> getDirectoryContents dir
 
 getProcs :: IO [FilePath]
-getProcs = (filter (\x -> not (any isAlpha x)) <$> (listDirectory "/tmp"))
+getProcs = (filter (all isNumber) <$> (listDirectory "/proc"))
 
 getProcsFullPaths :: IO [FilePath]
-getProcsFullPaths = (fmap . fmap) ("/tmp/" ++) getProcs
+getProcsFullPaths = (fmap . fmap) ("/proc/" ++) getProcs
 
 getProcsFDPaths :: IO [FilePath]
 getProcsFDPaths = (fmap . fmap) (++ "/fd") getProcsFullPaths
@@ -22,7 +22,19 @@ getProcsFDPaths = (fmap . fmap) (++ "/fd") getProcsFullPaths
 getFDContents :: IO [[FilePath]]
 getFDContents = join (sequence <$> (fmap . fmap) getAbsDirectoryContents getProcsFDPaths )
 
-getFDSLs = join $ traverse (filterM (fmap (not . isDirectory) . getFileStatus)) <$> getFDContents
+getFileStatusSafe :: FilePath -> IO (Maybe FileStatus)
+getFileStatusSafe p = do
+  result <- try $ getFileStatus p :: IO (Either SomeException FileStatus)
+  case result of
+    Left _ -> return Nothing
+    Right val -> return $ Just val
+
+getFDSLs = join $ traverse (filterM (check)) <$> getFDContents
+  where check p = do
+          result <- try $ getFileStatus p :: IO (Either SomeException FileStatus)
+          case result of
+            Left _ -> return False
+            Right val -> return $ (not $ isDirectory val)
 
 -- main :: IO ()
 -- main = do
@@ -42,7 +54,8 @@ main = do
   case result of
     Left ex -> putStrLn "Fuck"
     Right val -> do
-      traverse_ (putStrLn) [readSymbolicLink file | files <- val, file <- files]
+      --sequence_ [putStrLn $ file | files <- val, file <- files]
+      print =<< (traverse (readSymbolicLink) [file | files <- val, file <- files])
 --getSLPaths :: IO [[FilePath]]
 --getSLPaths = do
 --  x <- getProcsFDPaths
