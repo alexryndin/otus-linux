@@ -1,7 +1,11 @@
 #!/bin/env bash
 
-logFile=./nice.log
+logFile=./ionice.log
 cat /dev/null > "$logFile"
+if [[ ! -e ./out ]]; then
+    mkdir out
+fi
+
 
 log() {
     echo "$1" >> "$logFile"
@@ -9,7 +13,8 @@ log() {
 
 
 run() {
-    ionice -c"$nice" dd if=/dev/sda of=/dev/null bs=100K count=10000
+    ionice -c"$nice" dd if=/dev/sda of=./out/f${nice} bs=100M count=10 oflag=direct
+    rm -rf ./out/f${nice}
 }
 
 com2() {
