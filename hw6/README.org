@@ -1,0 +1,11 @@
+* Задания 1 и 2
+В качестве целевого пакета я выбрал neovim.
+За основу был взял пакет с сырцами версии 0.3.0, после чего спек-файл был пропатчен до версии 0.3.4
+Итоговый пакет установлен и протестирован
+Репозиторий - будет доступен здесь - 178.128.248.21/repo
+И, если я не накосячил с DNS, здесь - allinone.alexryndin.me/repo
+* Задание 3
+  #+BEGIN_SRC bash
+    sudo docker pull rlambda/otus-test-nginx
+    sudo docker run --name otus-nginx -d -p 8081:80  rlambda/otus-test-nginx
+  #+END_SRC
