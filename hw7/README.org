@@ -1,0 +1,16 @@
+* Восстановление пароля
+** Способ 1
+  Вот такую ошибку получаю при попытке дописать ~init=/bin/bash~  либо ~init=/bin/sh~ в самом конце команды linux16
+#+CAPTION: VirtualBox after init=/bin/bash
+#+NAME:   fig:SED-HR4049
+[[./img/1.png]]
+** Способ 2
+  Когда добавляю rd.break в конце команды linux16 то почему то это ни на что не влияет, я сразу попадаю в консоль как при обычной загрузке
+* Переименовывание VG
+  Мультик можно посмотреть через asciinema, файл show, либо по ссылке [[https://asciinema.org/a/vW9Ca1mqq22HXcnkKeNKpAO6T]]
+* Добавление модуля в dracut
+  show2 или [[https://asciinema.org/a/4kgGMxqNRJs70C5vlS4l2p0cS]]
+  #+CAPTION: Пингвин
+  #+NAME: Пингвин
+  [[./img/3.png]]
+  
