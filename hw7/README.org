@@ -30,3 +30,37 @@ emergency mode, а не просто заменили систему иници�
   #+NAME: Пингвин
   [[./img/3.png]]
   
+* Grub на lvm
+За основу была взят образ centos 1804.02. Мультик не записал, так как делал, напарываясь
+на различные косяки в течение пары дней. Что было сделано:
+
+ 1. Ставим груб и генерим образ inird
+  #+BEGIN_SRC bash
+    umount /boot
+    yum-config-manager --add-repo https://yum.rumyantsev.com/centos/7/x86_64/
+    yum install --nogpg grub2 -y # Проверку gpg не удалось обойти даже с gpgcheck=0 в repo-файле
+    pvcreate  --bootloaderareasize 1m /dev/sdb
+    grub2-install --modules='lvm' /dev/sdb
+    mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
+    dracut -fv
+  #+END_SRC
+ 2. Патчим /etc/default/grub, нас интересует строчка ~GRUB_PRELOAD_MODULES="lvm"~
+ 3. ~grub2-mkconfig -o /boot/grub2/grub.cfg~
+ 4. reboot
+ 5. Выхлоп lsblk:
+  #+BEGIN_SRC 
+  [root@lvm ~]# lsblk
+  NAME                    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+  sda                       8:0    0   40G  0 disk 
+  ├─sda1                    8:1    0    1M  0 part 
+  ├─sda2                    8:2    0    1G  0 part 
+  └─sda3                    8:3    0   39G  0 part 
+    ├─VolGroup00-LogVol00 253:0    0 37.5G  0 lvm  /
+    └─VolGroup00-LogVol01 253:1    0  1.5G  0 lvm  [SWAP]
+  sdb                       8:16   0   10G  0 disk 
+  sdc                       8:32   0    2G  0 disk 
+  sdd                       8:48   0    1G  0 disk 
+  sde                       8:64   0    1G  0 disk 
+  #+END_SRC
+
+
