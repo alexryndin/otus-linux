@@ -1,0 +1,52 @@
+* Задание 1
+  * [[./watchlog.timer]]
+  * [[./watchlog.service]]
+* Задание 2
+  * [[./spawn-fcgi.service]]
+* Задание 3
+  * [[./httpd@.service]]
+  * Выхлоп:
+#+BEGIN_SRC bash
+  [vagrant@systemd ~]$ sudo ss -tulpn
+  Netid State      Recv-Q Send-Q Local Address:Port  Peer Address:Port
+  udp   UNCONN     0      0                  *:68               *:*     users:(("dhclient",pid=4881,fd=6))
+  udp   UNCONN     0      0                  *:111              *:*     users:(("rpcbind",pid=2861,fd=5),("systemd",pid=1,fd=67))
+  udp   UNCONN     0      0          127.0.0.1:323              *:*     users:(("chronyd",pid=2864,fd=1))
+  udp   UNCONN     0      0                  *:910              *:*     users:(("rpcbind",pid=2861,fd=10))
+  udp   UNCONN     0      0                 :::111             :::*     users:(("rpcbind",pid=2861,fd=7),("systemd",pid=1,fd=69))
+  udp   UNCONN     0      0                ::1:323             :::*     users:(("chronyd",pid=2864,fd=2))
+  udp   UNCONN     0      0                 :::910             :::*     users:(("rpcbind",pid=2861,fd=11))
+  tcp   LISTEN     0      128                *:111              *:*     users:(("rpcbind",pid=2861,fd=4),("systemd",pid=1,fd=66))
+  tcp   LISTEN     0      128                *:22               *:*     users:(("sshd",pid=3253,fd=3))
+  tcp   LISTEN     0      100        127.0.0.1:25               *:*     users:(("master",pid=3476,fd=13))
+  tcp   LISTEN     0      128               :::111             :::*     users:(("rpcbind",pid=2861,fd=6),("systemd",pid=1,fd=68))
+  tcp   LISTEN     0      128               :::80              :::*     users:(("httpd",pid=9067,fd=4),("httpd",pid=9066,fd=4),("httpd",pid=9065,fd=4),("httpd",pid=9064,fd=4),("httpd",pid=9063,fd=4),("httpd",pid=9062,fd=4),("httpd",pid=9061,fd=4))
+  tcp   LISTEN     0      128               :::8080            :::*     users:(("httpd",pid=9050,fd=4),("httpd",pid=9049,fd=4),("httpd",pid=9048,fd=4),("httpd",pid=9047,fd=4),("httpd",pid=9046,fd=4),("httpd",pid=9045,fd=4),("httpd",pid=9044,fd=4))
+  tcp   LISTEN     0      128               :::22              :::*     users:(("sshd",pid=3253,fd=4))
+  tcp   LISTEN     0      100              ::1:25              :::*     users:(("master",pid=3476,fd=14))
+#+END_SRC
+* Задание 4
+ * [[./jira.service]]
+ * Выхлоп:
+ #+BEGIN_SRC 
+ [vagrant@systemd ~]$ sudo systemctl status jira                                                                                                                                                                                           
+● jira.service - Jira service unit by RA
+   Loaded: loaded (/usr/lib/systemd/system/jira.service; disabled; vendor preset: disabled)
+   Active: active (running) since Thu 2019-02-28 12:57:31 UTC; 9min ago
+ Main PID: 26135 (java)
+   CGroup: /system.slice/jira.service
+           └─26135 /opt/atlassian/jira/jre//bin/java -Djava.util.logging.config.file=/opt/atlassian/jira/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms384m -Xmx2048m -XX:InitialCodeCacheSi...
+
+Feb 28 12:57:55 systemd java[26135]: 2019-02-28 12:57:55,676 JIRA-Bootstrap INFO      [c.a.jira.startup.JiraStartupLogger] JIRA pre-database startup checks completed successfully.
+Feb 28 12:57:55 systemd java[26135]: 2019-02-28 12:57:55,757 JIRA-Bootstrap INFO      [c.a.j.config.database.DatabaseConfigurationManagerImpl] The database is not yet configured. Enqueuing Database Checklist Launcher o...se-activated queue
+Feb 28 12:57:55 systemd java[26135]: 2019-02-28 12:57:55,757 JIRA-Bootstrap INFO      [c.a.j.config.database.DatabaseConfigurationManagerImpl] The database is not yet configured. Enqueuing Post database-configuration l...se-activated queue
+Feb 28 12:57:55 systemd java[26135]: 2019-02-28 12:57:55,762 JIRA-Bootstrap INFO      [c.a.jira.startup.LauncherContextListener] Memory Usage:
+Feb 28 12:57:55 systemd java[26135]: ---------------------------------------------------------------------------------
+Feb 28 12:57:55 systemd java[26135]: Heap memory     :  Used:  106 MiB.  Committed:  371 MiB.  Max: 1980 MiB
+Feb 28 12:57:55 systemd java[26135]: Non-heap memory :  Used:   73 MiB.  Committed:   93 MiB.  Max: 1536 MiB
+Feb 28 12:57:55 systemd java[26135]: ---------------------------------------------------------------------------------
+Feb 28 12:57:55 systemd java[26135]: TOTAL           :  Used:  179 MiB.  Committed:  464 MiB.  Max: 3516 MiB
+Feb 28 12:57:55 systemd java[26135]: ---------------------------------------------------------------------------------
+Hint: Some lines were ellipsized, use -l to show in full.
+
+ #+END_SRC
