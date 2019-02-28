@@ -1,0 +1,11 @@
+[Unit]
+Description=Jira service unit by RA
+After=network.target
+
+[Service]
+ExecStart=/opt/atlassian/jira/jre//bin/java -Djava.util.logging.config.file=/opt/atlassian/jira/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms384m -Xmx2048m -XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m -Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT -Datlassian.plugins.startup.options= -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Xloggc:/opt/atlassian/jira/logs/atlassian-jira-gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20M -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCCause -Dignore.endorsed.dirs= -classpath /opt/atlassian/jira/bin/bootstrap.jar:/opt/atlassian/jira/bin/tomcat-juli.jar -Dcatalina.base=/opt/atlassian/jira -Dcatalina.home=/opt/atlassian/jira -Djava.io.tmpdir=/opt/atlassian/jira/temp org.apache.catalina.startup.Bootstrap start
+
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
