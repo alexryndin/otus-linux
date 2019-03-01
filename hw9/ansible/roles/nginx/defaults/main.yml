@@ -1,0 +1,4 @@
+---
+# defaults file for nginx
+nginx:
+  http_port: 80
