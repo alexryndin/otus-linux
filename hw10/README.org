@@ -1,0 +1,22 @@
+* HW 10 - PAM
+** Задание
+  PAM
+  1. Запретить всем пользователям, кроме группы admin логин в выходные и праздничные дни
+  2. Дать конкретному пользователю права рута 
+
+** Запуск
+#+BEGIN_SRC bash
+vagrant up
+#+END_SRC
+
+** Открытые вопросы
+  * Если логинится по ssh с приватным ключом, политики pam_script не применяются
+  * Аналогично, если логинимся по ssh, запускаемый шелл не будет иметь capabilities, прописанных в capability.conf:
+ #+BEGIN_SRC bash
+   [root@otuslinux ~]# ps aux | grep ssh | grep bob
+   vagrant   9654  0.0  0.4  82724  4736 pts/8    S+   14:39   0:00 ssh bob@localhost
+   root      9655  0.0  0.5 158676  5540 ?        Ss   14:39   0:00 sshd: bob [priv]
+   bob       9672  0.0  0.2 158676  2368 ?        S    14:39   0:00 sshd: bob@pts/9
+   [root@otuslinux ~]# getpcaps 9672
+   Capabilities for `9672': =
+ #+END_SRC
