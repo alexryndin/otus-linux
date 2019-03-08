@@ -11,6 +11,20 @@ vagrant up
 
 ** Открытые вопросы
   * Если логинится по ssh с приватным ключом, политики pam_script не применяются
+    * модуль auth, судя по всему, игнорируется при авторизации по ключу, подробнее:
+#+BEGIN_SRC 
+  # Set this to ‘yes’ to enable PAM authentication, account processing,
+  # and session processing. If this is enabled, PAM authentication will
+  # be allowed through the ChallengeResponseAuthentication and
+  # PasswordAuthentication.  Depending on your PAM configuration,
+  # PAM authentication via ChallengeResponseAuthentication may bypass
+  # the setting of “PermitRootLogin without-password”.
+  # If you just want the PAM account and session checks to run without
+  # PAM authentication, then enable this but set PasswordAuthentication
+  # and ChallengeResponseAuthentication to ‘no’.
+  # WARNING: ‘UsePAM no’ is not supported in Red Hat Enterprise Linux and may cause several
+  # problems.
+#+END_SRC
   * Аналогично, если логинимся по ssh, запускаемый шелл не будет иметь capabilities, прописанных в capability.conf:
  #+BEGIN_SRC bash
    [root@otuslinux ~]# ps aux | grep ssh | grep bob
@@ -20,3 +34,8 @@ vagrant up
    [root@otuslinux ~]# getpcaps 9672
    Capabilities for `9672': =
  #+END_SRC
+
+** Ссылки:
+  * https://medium.com/information-and-technology/wtf-is-pam-99a16c80ac57
+  * https://www.ibm.com/developerworks/ru/library/l-pam/index.html
+  * https://www.opennet.ru/base/net/pam_linux.txt.html
