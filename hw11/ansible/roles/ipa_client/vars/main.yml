@@ -1,0 +1,5 @@
+ipa:
+  domain: localdomain
+  server: indianpaleale
+  principal: admin
+  password: adminadmin

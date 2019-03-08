@@ -1,0 +1,8 @@
+---
+all:
+  children:
+    clients:
+      hosts:
+        beer1:
+          ansible_host: 192.168.11.108
+#          ansible_ssh_pass: admin

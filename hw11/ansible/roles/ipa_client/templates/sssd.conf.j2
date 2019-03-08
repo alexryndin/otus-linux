@@ -1,0 +1,35 @@
+[domain/localdomain]
+
+cache_credentials = True
+krb5_store_password_if_offline = True
+ipa_domain = localdomain
+id_provider = ipa
+auth_provider = ipa
+access_provider = ipa
+ipa_hostname = beer1.localdomain
+chpass_provider = ipa
+ipa_server = _srv_, indianpaleale.localdomain
+ldap_tls_cacert = /etc/ipa/ca.crt
+[sssd]
+services = nss, sudo, pam, ssh
+
+domains = localdomain
+[nss]
+homedir_substring = /home
+
+[pam]
+
+[sudo]
+
+[autofs]
+
+[ssh]
+
+[pac]
+
+[ifp]
+
+[secrets]
+
+[session_recording]
+

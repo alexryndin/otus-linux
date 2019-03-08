@@ -1,0 +1,50 @@
+---
+
+- name: install stuff
+  yum:
+    name: ipa-client
+    state: present
+
+    # Shit
+#- name: template config
+#  template:
+#    src: "{{ item.src }}"
+#    dest: "{{ item.dest }}"
+#    owner: root
+#    group: root
+#    mode: 0600
+#  with_items:
+#    - { src: ldap.conf.j2, dest: /etc/openldap/ldap.conf }
+#    - { src: nsswitch.conf.j2, dest: /etc/nsswitch.conf }
+#    - { src: sshd_config.j2, dest: /etc/ssh/sshd_config }
+#    - { src: ssh_config.j2, dest: /etc/ssh/ssh_config }
+#    - { src: sssd.conf.j2, dest: /etc/sssd/sssd.conf }
+#    - { src: krb5.conf.j2, dest: /etc/krb5.conf }
+
+- name: Check if host is enrolled
+  register: freeipaclient_ipaconf
+  check_mode: no
+  stat:
+    path: /etc/ipa/default.conf
+
+- name: Enroll host in domain
+  become: true
+  when: not freeipaclient_ipaconf.stat.exists
+  command: >
+    ipa-client-install 
+    {{'--hostname=' + ansible_nodename + ipa.domain }}
+    --server={{ ipa.server + ipa.domain }}
+    --domain={{ ipa.domain }}
+    --principal={{ ipa.principal }}
+    --password={{ ipa.password }}
+    --unattended
+    --force-ntpd
+    --force
+
+- name: restart stuff
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - sshd
+    - sssd

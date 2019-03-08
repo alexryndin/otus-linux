@@ -1,0 +1,9 @@
+---
+- hosts: clients
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: include_role
+      include_role:
+        name: ipa_client
+    

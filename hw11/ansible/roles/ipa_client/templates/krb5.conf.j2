@@ -1,0 +1,36 @@
+#File modified by ipa-client-install
+
+includedir /etc/krb5.conf.d/
+includedir /var/lib/sss/pubconf/krb5.include.d/
+
+[libdefaults]
+  default_realm = LOCALDOMAIN
+  dns_lookup_realm = false
+  dns_lookup_kdc = false
+  rdns = false
+  dns_canonicalize_hostname = false
+  ticket_lifetime = 24h
+  forwardable = true
+  udp_preference_limit = 0
+  default_ccache_name = KEYRING:persistent:%{uid}
+
+
+[realms]
+  LOCALDOMAIN = {
+    kdc = indianpaleale.localdomain:88
+    master_kdc = indianpaleale.localdomain:88
+    admin_server = indianpaleale.localdomain:749
+    kpasswd_server = indianpaleale.localdomain:464
+    default_domain = localdomain
+    pkinit_anchors = FILE:/var/lib/ipa-client/pki/kdc-ca-bundle.pem
+    pkinit_pool = FILE:/var/lib/ipa-client/pki/ca-bundle.pem
+
+  }
+
+
+[domain_realm]
+  .localdomain = LOCALDOMAIN
+  localdomain = LOCALDOMAIN
+  beer2.localdomain = LOCALDOMAIN
+
+
