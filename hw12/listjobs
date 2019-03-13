@@ -1,0 +1,19 @@
+*list jobs
+Automatically selected Catalog: MyCatalog
+Using Catalog "MyCatalog"
++-------+-------------------+---------------------+------+-------+----------+------------+-----------+
+| jobid | name              | starttime           | type | level | jobfiles | jobbytes   | jobstatus |
++-------+-------------------+---------------------+------+-------+----------+------------+-----------+
+|     1 | BackupClientOtus2 | 2019-03-13 10:05:40 | B    | F     |        0 |          0 | f         |
+|     2 | BackupClientOtus2 | 2019-03-13 10:05:47 | B    | F     |        0 |          0 | f         |
+|     3 | BackupClientOtus1 | 2019-03-13 10:05:54 | B    | F     |        0 |          0 | f         |
+|     4 | BackupClientOtus1 | 2019-03-13 10:06:01 | B    | F     |        0 |          0 | f         |
+|     5 | BackupClientOtus2 | 2019-03-13 10:15:02 | B    | F     |        0 |          0 | f         |
+|     6 | BackupClientOtus1 | 2019-03-13 10:15:09 | B    | F     |        0 |          0 | f         |
+|     7 | BackupClientOtus2 | 2019-03-13 10:21:02 | B    | F     |        0 |          0 | f         |
+|     8 | BackupClientOtus1 | 2019-03-13 10:21:09 | B    | F     |        0 |          0 | f         |
+|     9 | BackupClientOtus2 | 2019-03-13 10:24:02 | B    | F     |    2,399 | 10,365,258 | T         |
+|    10 | BackupClientOtus1 | 2019-03-13 10:24:06 | B    | F     |    2,399 | 10,365,258 | T         |
+|    11 | BackupClientOtus2 | 2019-03-13 10:25:02 | B    | I     |        0 |          0 | T         |
+|    12 | BackupClientOtus1 | 2019-03-13 10:25:05 | B    | I     |        0 |          0 | T         |
++-------+-------------------+---------------------+------+-------+----------+------------+-----------+
