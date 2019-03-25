@@ -1,0 +1,20 @@
+---
+all:
+  children:
+    web:
+      hosts:
+        web1:
+          ansible_host: 192.168.11.108
+          ansible_ssh_private_key_file: ../.vagrant/machines/web1/virtualbox/private_key
+        web2:
+          ansible_host: 192.168.11.109
+          ansible_ssh_private_key_file: ../.vagrant/machines/web2/virtualbox/private_key
+    log:
+      hosts:
+        rsyslog:
+          ansible_host: 192.168.11.107
+          ansible_ssh_private_key_file: ../.vagrant/machines/log/virtualbox/private_key
+        elk:
+          ansible_host: 192.168.11.106
+          ansible_ssh_private_key_file: ../.vagrant/machines/elk/virtualbox/private_key
+#          ansible_ssh_pass: admin

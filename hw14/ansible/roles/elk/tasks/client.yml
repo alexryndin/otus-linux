@@ -1,0 +1,22 @@
+---
+- name: install filebeat
+  yum:
+    name: filebeat
+    state: present
+
+- name: template filebeat config and module config
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: nginx.yml.j2, dest: /etc/filebeat/modules.d/nginx.yml }
+    - { src: filebeat.yml.j2, dest: /etc/filebeat/filebeat.yml }
+  notify:
+    restart-filebeat
+
+- name: enable nginx filebeat module
+  shell: filebeat modules enable nginx
+
+- name: enable filebeat dashboars
+  shell: >-
+    filebeat setup

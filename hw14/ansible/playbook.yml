@@ -1,0 +1,54 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: disable selinux
+      selinux:
+        state: disabled
+
+- hosts: web
+  remote_user: vagrant
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: include_role auditd for web
+      include_role:
+        name: auditd
+      vars:
+        type: client
+    - name: include_role nginx for web
+      include_role:
+        name: nginx
+    - name: include_role elk-clients for web
+      include_role:
+        name: elk
+      vars:
+        type: client
+
+- hosts: rsyslog
+  gather_facts: no
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: include_role
+      include_role:
+        name: auditd
+      vars:
+        type: server
+    - name: include_role
+      include_role:
+        name: rsyslog
+      vars:
+        type: server
+
+- hosts: elk
+  gather_facts: no
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: include_role
+      include_role:
+        name: elk
+      vars:
+        type: server

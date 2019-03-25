@@ -1,0 +1,6 @@
+---
+# handlers file for auditd
+- name: restart
+  shell: service auditd restart
+    # name: auditd
+    # state: restarted

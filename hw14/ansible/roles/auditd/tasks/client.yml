@@ -1,0 +1,18 @@
+---
+- name: install audispd plugins
+  yum:
+    name: audispd-plugins
+    state: present
+  tags:
+    - install
+
+- name: "template client config : {{ item }}"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: auditd.conf.j2, dest: /etc/audit/auditd.conf }
+    - { src: audisp-remote.conf.j2, dest: /etc/audisp/audisp-remote.conf }
+    - { src: au-remote.conf.j2, dest: /etc/audisp/plugins.d/au-remote.conf }
+  notify:
+    - restart

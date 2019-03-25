@@ -1,0 +1,21 @@
+---
+- name: add gpg key
+  rpm_key:
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: install jdk for the most powerful and most progressive programming language ever
+  yum:
+    name: java-11-openjdk
+    state: present
+
+- name: Add elk repository
+  yum_repository:
+    name: elk
+    description: Elasticsearch repository for 6.x packages
+    baseurl: https://artifacts.elastic.co/packages/6.x/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: "invoke {{ type }}-specific taskbook"
+  include_tasks: "{{ type }}.yml"

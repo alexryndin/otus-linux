@@ -1,0 +1,6 @@
+filebeat:
+  nginx:
+    access_logs:
+      enabled: "true"
+    error_logs:
+      enabled: "true"

@@ -1,0 +1,19 @@
+---
+- name: install rsyslog package
+  yum:
+    state: present
+    name:
+      - rsyslog
+  tags:
+    - install
+
+#- name: "invoke {{ type }}-specific taskbook"
+  #include_tasks:
+    #name: "{{ type }}.yml"
+
+- name: template config
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  notify:
+    - restart

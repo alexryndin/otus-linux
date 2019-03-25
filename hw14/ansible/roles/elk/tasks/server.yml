@@ -1,0 +1,40 @@
+---
+- name: install elk server-side stack
+  yum:
+    name:
+      - elasticsearch
+      - kibana
+    state: present
+  tags:
+    - install
+
+- name: install elasticsearch plugins
+  elasticsearch_plugin:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - ingest-geoip
+    - ingest-user-agent
+
+- name: enable elk server-side components
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - elasticsearch
+    - kibana
+
+- name: template elasticsearch conf
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+  notify:
+    - restart-elasticsearch
+
+- name: template kibana conf
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+  notify:
+    - restart-kibana
