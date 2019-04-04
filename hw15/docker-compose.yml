@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  nginx:
+    build: ./docker-star/
+    expose:
+      - 80
+    ports:
+      - 8082:80
+    volumes:
+      - app-volume:/usr/share/nginx/html
+    networks:
+      - net
+
+  php:
+    image: php:7-fpm
+    expose:
+      - 9000
+    ports:
+      - 9088:9000
+    volumes:
+      - app-volume:/usr/share/nginx/html
+    networks:
+      - net
+
+volumes:
+  app-volume:
+
+networks:
+  net:
