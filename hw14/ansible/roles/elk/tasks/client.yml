@@ -20,3 +20,9 @@
 - name: enable filebeat dashboars
   shell: >-
     filebeat setup
+
+- name: start filebeat
+  systemd:
+    name: filebeat
+    state: started
+    enabled: yes

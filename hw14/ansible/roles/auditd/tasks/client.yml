@@ -15,4 +15,4 @@
     - { src: audisp-remote.conf.j2, dest: /etc/audisp/audisp-remote.conf }
     - { src: au-remote.conf.j2, dest: /etc/audisp/plugins.d/au-remote.conf }
   notify:
-    - restart
+    - restart-auditd

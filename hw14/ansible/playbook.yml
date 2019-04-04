@@ -7,6 +7,20 @@
       selinux:
         state: disabled
 
+
+- hosts: elk
+  gather_facts: no
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: include_role
+      include_role:
+        name: elk
+      vars:
+        type: server
+      tags:
+        - always
+
 - hosts: web
   remote_user: vagrant
   gather_facts: yes
@@ -31,24 +45,13 @@
   remote_user: vagrant
   become: yes
   tasks:
-    - name: include_role
+    - name: include_role auditd
       include_role:
         name: auditd
       vars:
         type: server
-    - name: include_role
+    - name: include_role rsyslog
       include_role:
         name: rsyslog
-      vars:
-        type: server
-
-- hosts: elk
-  gather_facts: no
-  remote_user: vagrant
-  become: yes
-  tasks:
-    - name: include_role
-      include_role:
-        name: elk
       vars:
         type: server

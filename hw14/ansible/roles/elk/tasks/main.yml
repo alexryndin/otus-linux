@@ -19,3 +19,5 @@
 
 - name: "invoke {{ type }}-specific taskbook"
   include_tasks: "{{ type }}.yml"
+  tags:
+    - always

@@ -37,3 +37,9 @@
   tags:
     - install
     - configure
+
+- name: start and enable nginx
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes

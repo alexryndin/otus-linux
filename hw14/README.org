@@ -25,10 +25,25 @@
 ** Как запустить
    #+BEGIN_SRC bash
      vagrant up
-     ansible-playbook playbook.yml -i inventory.yml
+     cd ansible && ansible-playbook playbook.yml -i inventory.yml
    #+END_SRC
 ** Картинки
  [[images/1.png]]
  [[images/2.png]]
 ** Вопросы
    * Почему-то запросы не отображаются на карте
+** Работа над ошибками
+   * /не работает без ANSIBLE_HOST_KEY_CHECKING=false(или аналогичной опции ansible.cfg)./
+     * УМВР. Proof - [[https://asciinema.org/a/XcemflRD9un5vHjJ4ZzHFUx2w ]] or [[./show]]
+       Не исключено, что ошибка возникала у вас ввиду того, что не была переключена рабочая директория на ansible (~cd ansible~)
+       Кроме того я обнаружил, что если в разных ролях определены хендлеры с одинаковыми именами, будет запущен только один из. Таким образом у меня перезапускался auditd, но не перезапускался rsyslog
+   * /По поводу rsyslog: не вижу чтобы был указан удаленный сервер для сбора логов на web/
+     * Открываем файл [[ansible/roles/nginx/templates/nginx.conf.j2]], где среди прочего можем обнаружить следующие строчки:
+   #+BEGIN_SRC conf
+     error_log syslog:server={{ hostvars.rsyslog.ansible_host }} debug;
+       <...>
+     access_log syslog:server={{ hostvars.rsyslog.ansible_host }},severity=info main;
+   #+END_SRC
+       В результате логи отправляются на удалённый сервер через syslog самим нжинксом, либо я не понял вопрос.
+   * /Вероятная причина - вы пытаетесь выполнить filebeat -e setup при еще не поставленном elk стэке./
+     * Всё так, плейбук был написан с ошибкой, теперь установка стека elk вынесена на первое место.

@@ -6,4 +6,4 @@
   loop:
     - { src: auditd.conf.j2, dest: /etc/audit/auditd.conf }
   notify:
-    - restart
+    - restart-auditd

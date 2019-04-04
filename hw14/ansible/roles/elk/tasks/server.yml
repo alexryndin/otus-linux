@@ -8,13 +8,31 @@
   tags:
     - install
 
-- name: install elasticsearch plugins
-  elasticsearch_plugin:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - ingest-geoip
-    - ingest-user-agent
+# - name: install elasticsearch plugins
+#   elasticsearch_plugin:
+#     name: "{{ item }}"
+#     state: present
+#   loop:
+#     - ingest-geoip
+#     - ingest-user-agent
+
+- name: template elasticsearch conf
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+  notify:
+    - restart-elasticsearch
+  tags:
+    - configure
+
+- name: template kibana conf
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+  notify:
+    - restart-kibana
+  tags:
+    - configure
 
 - name: enable elk server-side components
   service:
@@ -25,16 +43,11 @@
     - elasticsearch
     - kibana
 
-- name: template elasticsearch conf
-  template:
-    src: elasticsearch.yml.j2
-    dest: /etc/elasticsearch/elasticsearch.yml
-  notify:
-    - restart-elasticsearch
-
-- name: template kibana conf
-  template:
-    src: kibana.yml.j2
-    dest: /etc/kibana/kibana.yml
-  notify:
-    - restart-kibana
+# - name: enable services
+#   systemd:
+#     name: "{{ item }}"
+#     state: started
+#     enabled: yes
+#   loop:
+#     - kibana
+#     - elasticsearch
