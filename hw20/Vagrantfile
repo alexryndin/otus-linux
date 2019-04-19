@@ -1,0 +1,116 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+  :Router1=> {
+        :box_name => "centos/7",
+        :net => [
+                   {ip: '192.168.12.1', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+                   {ip: '192.168.13.1', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+                ]
+  },
+
+
+  :Router2=> {
+    :box_name => "centos/7",
+    :net => [
+      {ip: '192.168.12.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+      {ip: '192.168.23.1', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+    ]
+  },
+
+
+  :Router3=> {
+    :box_name => "centos/7",
+    :net => [
+      {ip: '192.168.23.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+      {ip: '192.168.13.2', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+    ]
+  }
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+    config.vm.define boxname do |box|
+
+      box.vm.box = boxconfig[:box_name]
+      box.vm.host_name = boxname.to_s
+
+      boxconfig[:net].each do |ipconf|
+        box.vm.network "private_network", ipconf
+      end
+
+      if boxconfig.key?(:public)
+        box.vm.network "public_network", boxconfig[:public]
+      end
+
+      box.vm.provision "shell", inline: <<-SHELL
+                mkdir -p ~root/.ssh
+                cp ~vagrant/.ssh/auth* ~root/.ssh
+        SHELL
+
+      case boxname.to_s
+      when "Router1"
+        box.vm.provision "shell", run: "always", inline: <<-SHELL
+            yum install quagga -y
+            echo -e 'net.ipv4.conf.all.forwarding=1\nnet.ipv4.ip_forward=1\nnet.ipv4.conf.all.rp_filter=0' >> /etc/sysctl.d/99-override.conf
+            sysctl net.ipv4.conf.all.forwarding=1
+            sysctl net.ipv4.conf.all.rp_filter=0
+            setsebool -P allow_zebra_write_config 1
+            cp /vagrant/files/osfpd.conf.1 /etc/quagga/ospfd.conf
+            cp /vagrant/files/zebra.conf.1 /etc/quagga/zebra.conf
+            cp /vagrant/files/daemons /etc/quagga/daemons
+            chown quagga:quagga /etc/quagga/ospfd.conf
+            chown quagga:quagga /etc/quagga/zebra.conf
+            chown quagga:quagga /etc/quagga/daemons
+            systemctl enable zebra
+            systemctl start zebra
+            systemctl enable ospfd
+            systemctl start ospfd
+            systemctl restart network
+
+            SHELL
+      when "Router2"
+        box.vm.provision "shell", run: "always", inline: <<-SHELL
+            yum install quagga -y
+            echo -e 'net.ipv4.conf.all.forwarding=1\nnet.ipv4.ip_forward=1\nnet.ipv4.conf.all.rp_filter=0' >> /etc/sysctl.d/99-override.conf
+            sysctl net.ipv4.conf.all.forwarding=1
+            sysctl net.ipv4.conf.all.rp_filter=0
+            cp /vagrant/files/osfpd.conf.2 /etc/quagga/ospfd.conf
+            cp /vagrant/files/zebra.conf.2 /etc/quagga/zebra.conf
+            cp /vagrant/files/daemons /etc/quagga/daemons
+            chown quagga:quagga /etc/quagga/ospfd.conf
+            chown quagga:quagga /etc/quagga/zebra.conf
+            chown quagga:quagga /etc/quagga/daemons
+            systemctl enable zebra
+            systemctl start zebra
+            systemctl enable ospfd
+            systemctl start ospfd
+            systemctl restart network
+            SHELL
+      when "Router3"
+        box.vm.provision "shell", run: "always", inline: <<-SHELL
+            yum install quagga -y
+            echo -e 'net.ipv4.conf.all.forwarding=1\nnet.ipv4.ip_forward=1\nnet.ipv4.conf.all.rp_filter=0' >> /etc/sysctl.d/99-override.conf
+            sysctl net.ipv4.conf.all.forwarding=1
+            sysctl net.ipv4.conf.all.rp_filter=0
+            cp /vagrant/files/osfpd.conf.3 /etc/quagga/ospfd.conf
+            cp /vagrant/files/zebra.conf.3 /etc/quagga/zebra.conf
+            cp /vagrant/files/daemons /etc/quagga/daemons
+            chown quagga:quagga /etc/quagga/ospfd.conf
+            chown quagga:quagga /etc/quagga/zebra.conf
+            chown quagga:quagga /etc/quagga/daemons
+            systemctl enable zebra
+            systemctl start zebra
+            systemctl enable ospfd
+            systemctl start ospfd
+            systemctl restart network
+            SHELL
+      end
+    end
+  end
+end

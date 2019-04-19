@@ -1,0 +1,24 @@
+!
+! Zebra configuration saved from vty
+!   2019/04/19 11:55:10
+!
+hostname Router2
+!
+interface eth0
+ ipv6 nd suppress-ra
+!
+interface eth1
+ ip address 192.168.12.2/30
+ ipv6 nd suppress-ra
+!
+interface eth2
+ ip address 192.168.23.1/30
+ ipv6 nd suppress-ra
+!
+interface lo
+!
+ip forwarding
+!
+!
+line vty
+!
