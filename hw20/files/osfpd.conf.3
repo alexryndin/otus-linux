@@ -10,15 +10,15 @@ log stdout
 !
 interface eth0
 !
-interface eth1r
+interface eth1
 !
 interface eth2
 !
 interface lo
 !
 router ospf
- network 192.168.23.0/30 area 0.0.0.0
- network 192.168.13.0/30 area 0.0.0.0
+ ospf router-id 0.0.0.3
+ network 192.168.0.0/16 area 0.0.0.0
 !
 line vty
 !
