@@ -28,5 +28,21 @@ www - смотрит на обоих клиентов
 #+begin_src 
 vagrant up
 #+end_src
+** Проверка работы:
+   #+begin_src 
+[vagrant@client2 ~]$ dig +short @192.168.50.10 web2.dns.lab
+192.168.50.16
+[vagrant@client2 ~]$ dig +short @192.168.50.10 web1.dns.lab
+192.168.50.15
+[vagrant@client2 ~]$ dig +short @192.168.50.10 www.newdns.lab
+   #+end_src
+   #+begin_src 
+[vagrant@client ~]$ dig +short  web1.dns.lab
+192.168.50.15
+[vagrant@client ~]$ dig +short  web2.dns.lab
+[vagrant@client ~]$ dig +short  www.newdns.lab
+192.168.50.15
+192.168.50.16
+   #+end_src
 ** Примечания:
    * Selinux включён
